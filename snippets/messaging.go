@@ -20,8 +20,8 @@ import (
 	"log"
 	"time"
 
-	firebase "firebase.google.com/go/v4"
-	"firebase.google.com/go/v4/messaging"
+	firebase "github.com/rapido-labs/firebase-admin-go/v4"
+	"github.com/rapido-labs/firebase-admin-go/v4/messaging"
 )
 
 func sendToToken(app *firebase.App) {
