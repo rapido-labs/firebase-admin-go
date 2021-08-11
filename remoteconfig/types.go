@@ -7,22 +7,22 @@ import (
 )
 
 // TagColor represents a tag color
-type TagColor int
+type TagColor string
 
 // Tag colors
 const (
-	colorUnspecified TagColor = iota
-	Blue
-	Brown
-	Cyan
-	DeepOrange
-	Green
-	Indigo
-	Lime
-	Orange
-	Pink
-	Purple
-	Teal
+	colorUnspecified TagColor = ""
+	Blue                      = "BLUE"
+	Brown                     = "BROWN"
+	Cyan                      = "CYAN"
+	DeepOrange                = "DEEPORANGE"
+	Green                     = "GREEN"
+	Indigo                    = "INDIGO"
+	Lime                      = "LIME"
+	Orange                    = "ORANGE"
+	Pink                      = "PINK"
+	Purple                    = "PURPLE"
+	Teal                      = "TEAL"
 )
 
 // Version a Remote Config template version.
