@@ -101,21 +101,21 @@ type Parameter struct {
 
 // ParameterValue .
 type ParameterValue struct {
-	explicitValue   string
-	useInAppDefault bool
+	ExplicitValue   string `json:"value"`
+	UseInAppDefault bool   `json:"useInAppDefault"`
 }
 
 // UseInAppDefaultValue returns a parameter value with the in app default as false
 func UseInAppDefaultValue() *ParameterValue {
 	return &ParameterValue{
-		useInAppDefault: false,
+		UseInAppDefault: false,
 	}
 }
 
 // NewExplicitParameterValue will add a new explicit parameter value
 func NewExplicitParameterValue(value string) *ParameterValue {
 	pm := UseInAppDefaultValue()
-	pm.explicitValue = value
+	pm.ExplicitValue = value
 	return pm
 }
 
