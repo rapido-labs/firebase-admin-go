@@ -1,6 +1,7 @@
 package remoteconfig
 
 import (
+	"encoding/json"
 	"time"
 
 	"google.golang.org/api/iterator"
@@ -33,12 +34,12 @@ const (
 type Version struct {
 	Description    string    `json:"description"`
 	IsLegacy       bool      `json:"isLegacy"`
-	RollbackSource string    `json:"rollbackSource"`
+	RollbackSource int64    `json:"rollbackSource"`
 	UpdateOrigin   string    `json:"updateOrigin"`
 	UpdateTime     time.Time `json:"updateTime"`
 	UpdateType     string    `json:"updateType"`
 	UpdateUser     *User     `json:"updateUser"`
-	VersionNumber  string    `json:"versionNumber"`
+	VersionNumber  int64    `json:"versionNumber,string"`
 }
 
 // VersionIterator represents the iterator for looping over versions
@@ -88,7 +89,7 @@ type RemoteConfig struct {
 
 // Response to save the API response including ETag
 type Response struct {
-	RemoteConfig
+	*RemoteConfig
 	Etag string `json:"etag"`
 }
 
@@ -102,7 +103,7 @@ type Parameter struct {
 // ParameterValue .
 type ParameterValue struct {
 	ExplicitValue   string `json:"value"`
-	UseInAppDefault bool   `json:"useInAppDefault"`
+	UseInAppDefault bool   `json:"useInAppDefault,omitempty"`
 }
 
 // UseInAppDefaultValue returns a parameter value with the in app default as false
@@ -128,11 +129,18 @@ type ParameterGroup struct {
 
 // Template .
 type Template struct {
-	Conditions      []*Condition
+	Conditions      []Condition
 	ETag            string
-	Parameters      map[string]*Parameter
-	ParameterGroups map[string]*ParameterGroup
-	Version         *Version
+	Parameters      map[string]Parameter
+	ParameterGroups map[string]ParameterGroup
+	Version         Version
+}
+func(t *RemoteConfig)Mime()string{
+	return "application/json"
+}
+func (t *RemoteConfig)Bytes()([]byte, error){
+	return json.Marshal(t)
+
 }
 
 // User represents a remote config user

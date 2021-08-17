@@ -51,7 +51,7 @@ func (c *Client) GetRemoteConfig(versionNumber string) (*Response, error) {
 	}
 
 	result := &Response{
-		RemoteConfig: data,
+		RemoteConfig: &data,
 		Etag:         resp.Header.Get("Etag"),
 	}
 
@@ -84,7 +84,7 @@ func (c *Client) UpdateRemoteConfig(eTag string, validateOnly bool) (*Response, 
 	}
 
 	result := &Response{
-		RemoteConfig: data,
+		RemoteConfig: &data,
 		Etag:         resp.Header.Get("Etag"),
 	}
 
@@ -200,10 +200,43 @@ func (c *Client) Versions(ctx context.Context, options *ListVersionsOptions) (*V
 	return nil, nil
 }
 
-// PublishTemplate will publish the specified temnplate
-func (c *Client) PublishTemplate(ctx context.Context, template *Template) (*Template, error) {
+// PublishTemplate will publish the specified template
+func (c *Client) PublishTemplate(ctx context.Context, template Template) (*Template, error) {
 	// TODO
-	return nil, nil
+	var opts []internal.HTTPOption
+	opts = append(opts, internal.WithHeader("If-Match", "*"))
+
+	// Optional. Version number of the RemoteConfig to look up.
+	// If not specified, the latest RemoteConfig will be returned.
+	reqData := &RemoteConfig{
+		Conditions:      template.Conditions,
+		Parameters:      template.Parameters,
+		Version:         template.Version,
+		ParameterGroups: template.ParameterGroups,
+	}
+	var data RemoteConfig
+	resp, err := c.hc.DoAndUnmarshal(
+		context.Background(),
+		&internal.Request{
+			Method: http.MethodPut,
+			URL:    c.getRootURL(),
+			Body:   reqData,
+			Opts:   opts,
+		},
+		&data,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	result := &Template{
+		Conditions:      data.Conditions,
+		Parameters:      data.Parameters,
+		ParameterGroups: nil,
+		Version:         data.Version,
+		ETag:            resp.Header.Get("Etag"),
+	}
+	return result, nil
 }
 
 // ValidateTemplate will run validations for the current template
