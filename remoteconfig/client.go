@@ -201,11 +201,11 @@ func (c *Client) Versions(ctx context.Context, options *ListVersionsOptions) (*V
 }
 
 // PublishTemplate will publish the specified template
-func (c *Client) PublishTemplate(ctx context.Context, template Template) (*Template, error) {
+func (c *Client) PublishTemplate(ctx context.Context, template Template, validateOnly bool) (*Template, error) {
 	// TODO
 	var opts []internal.HTTPOption
 	opts = append(opts, internal.WithHeader("If-Match", "*"))
-
+	opts = append(opts, internal.WithQueryParam("validateOnly", strconv.FormatBool(validateOnly)))
 	// Optional. Version number of the RemoteConfig to look up.
 	// If not specified, the latest RemoteConfig will be returned.
 	reqData := &RemoteConfig{
