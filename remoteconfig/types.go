@@ -34,12 +34,12 @@ const (
 type Version struct {
 	Description    string    `json:"description"`
 	IsLegacy       bool      `json:"isLegacy"`
-	RollbackSource int64    `json:"rollbackSource"`
+	RollbackSource int64     `json:"rollbackSource"`
 	UpdateOrigin   string    `json:"updateOrigin"`
 	UpdateTime     time.Time `json:"updateTime"`
 	UpdateType     string    `json:"updateType"`
 	UpdateUser     *User     `json:"updateUser"`
-	VersionNumber  int64    `json:"versionNumber,string"`
+	VersionNumber  int64     `json:"versionNumber,string"`
 }
 
 // VersionIterator represents the iterator for looping over versions
@@ -98,6 +98,7 @@ type Parameter struct {
 	ConditionalValues map[string]*ParameterValue `json:"conditionalValues"`
 	DefaultValue      *ParameterValue            `json:"defaultValue"`
 	Description       string                     `json:"description"`
+	ValueType         string                     `json:"valueType,omitempty"`
 }
 
 // ParameterValue .
@@ -135,10 +136,11 @@ type Template struct {
 	ParameterGroups map[string]ParameterGroup
 	Version         Version
 }
-func(t *RemoteConfig)Mime()string{
+
+func (t *RemoteConfig) Mime() string {
 	return "application/json"
 }
-func (t *RemoteConfig)Bytes()([]byte, error){
+func (t *RemoteConfig) Bytes() ([]byte, error) {
 	return json.Marshal(t)
 
 }
