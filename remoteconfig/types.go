@@ -98,7 +98,6 @@ type Parameter struct {
 	ConditionalValues map[string]*ParameterValue `json:"conditionalValues"`
 	DefaultValue      *ParameterValue            `json:"defaultValue"`
 	Description       string                     `json:"description"`
-	ValueType         string                     `json:"valueType,omitempty"`
 }
 
 // ParameterValue .
